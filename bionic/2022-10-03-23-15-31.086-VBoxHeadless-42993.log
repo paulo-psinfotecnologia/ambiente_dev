@@ -1,0 +1,12 @@
+Log created: 2022-10-03T23:15:31.864116000Z
+Process ID:  42993 (0xa7f1)
+Parent PID:  1 (0x1)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: bionic_phpweb_1664820383246_51776
+Arg[3]: --startvm
+Arg[4]: d320f22f-5fd3-4e86-861b-348aabec86c4
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2

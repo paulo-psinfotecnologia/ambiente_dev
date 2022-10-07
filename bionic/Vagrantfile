@@ -1,0 +1,32 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  
+  config.vm.define "mysqldb" do |db|
+    db.vm.network "public_network", ip: "192.168.1.17"
+    db.vm.provision "shell", path: "script.sh"
+    db.vm.provision "shell", inline: "cat /configs/id_bionic.pub >> .ssh/authorized_keys"
+    db.vm.provision "shell", inline: "cat /configs/mysqld.cnf > /etc/mysql/mysql.conf.d/mysqld.cnf"
+    db.vm.synced_folder "./configs", "/configs"
+    db.vm.synced_folder ".", "/vagrant", disabled: true
+  end
+
+  config.vm.define "phpweb" do |phpweb|
+    phpweb.vm.network "forwarded_port", guest: 8888, host: 8888
+    phpweb.vm.network "public_network", ip: "192.168.1.18"
+    phpweb.vm.provision "shell", inline: "apt-get update && apt-get install -y puppet"
+
+    phpweb.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "./configs/manifests"
+    puppet.manifest_file = "phpweb.pp"
+  end
+
+  config.vm.define "mysqlserver" do |mysqlserver|
+    mysqlserver.vm.network "public_network", ip: "192.168.1.19"
+  end
+
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.network "public_network", ip: "192.168.1.20"
+    ansible.vm.provision "shell", path: "script1.sh" 
+    end  
+  end
+end
